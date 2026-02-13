@@ -80,30 +80,14 @@ jobs:
           
           Write-Host "🎯 Cấu hình hoàn tất!" -ForegroundColor Green
 
-      # TẠO USER PREMIUM - ĐÃ SỬA LỖI
+      # TẠO USER PREMIUM - PASSWORD CỐ ĐỊNH: 1122@ronak
       - name: 👤 TẠO TÀI KHOẢN PREMIUM
         run: |
           Write-Host ""
           Write-Host "👤 ĐANG TẠO TÀI KHOẢN PREMIUM" -ForegroundColor Yellow
           
-          # Tạo password siêu bảo mật
-          function New-PremiumPassword {
-              $upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
-              $lower = 'abcdefghijkmnpqrstuvwxyz'
-              $numbers = '23456789'
-              $symbols = '!@#$%&*+-='
-              
-              $password = @(
-                  ($upper.ToCharArray() | Get-Random -Count 3) -join '',
-                  ($lower.ToCharArray() | Get-Random -Count 3) -join '',
-                  ($numbers.ToCharArray() | Get-Random -Count 3) -join '',
-                  ($symbols.ToCharArray() | Get-Random -Count 3) -join ''
-              ) -join ''
-              
-              return -join ($password.ToCharArray() | Sort-Object {Get-Random})
-          }
-          
-          $matKhau = New-PremiumPassword
+          # Thiết lập mật khẩu cố định
+          $matKhau = "1122@ronak"
           $securePass = ConvertTo-SecureString $matKhau -AsPlainText -Force
           
           # Xóa user cũ nếu tồn tại
@@ -114,9 +98,8 @@ jobs:
               Write-Host "│ ℹ️  Không có user cũ để xóa" -ForegroundColor Blue
           }
           
-          # Tạo user mới với đầy đủ quyền - ĐÃ SỬA LỖI
+          # Tạo user mới với đầy đủ quyền
           try {
-              # SỬA LỖI: Tạo user không dùng PasswordNeverExpires parameter
               New-LocalUser -Name "AISTV-PREMIUM" -Password $securePass -AccountNeverExpires -Description "AI STV Premium Account"
               Write-Host "│ ✅ Đã tạo user mới" -ForegroundColor Green
               
@@ -245,7 +228,7 @@ jobs:
         run: |
           $matKhau = Get-Content $env:TEMP\rdp_password.txt -ErrorAction SilentlyContinue
           if (-not $matKhau) {
-              $matKhau = "Không thể đọc mật khẩu"
+              $matKhau = "1122@ronak"
           }
           
           # Chuyển đổi thời gian từ input sang phút
@@ -286,7 +269,6 @@ jobs:
       # DUY TRÌ PHIÊN ỔN ĐỊNH
       - name: ⏳ DUY TRÌ PHIÊN LÀM VIỆC
         run: |
-          $matKhau = Get-Content $env:TEMP\rdp_password.txt -ErrorAction SilentlyContinue
           $totalMinutes = $env:TOTAL_MINUTES
           
           # Tính thời gian chính xác
